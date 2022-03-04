@@ -5,9 +5,11 @@ set ns [new Simulator]
 set var [lindex $argv 0]
 # DRoptail or RED 
 set queueStr [lindex $argv 1]
+# Set trace filename
+set tracefile [lindex $argv 2]
 
 #Open the trace file (before you start the experiment!)
-set tf [open my_experimenta3_output.tr w]
+set tf [open $tracefile.tr w]
 $ns trace-all $tf
 
 # Define a 'finish' procedure

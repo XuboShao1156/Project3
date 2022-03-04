@@ -5,15 +5,18 @@ set ns [new Simulator]
 set var1 [lindex $argv 0]
 set var2 [lindex $argv 1]
 # Set  CBR flow rate
- set rate [lindex $argv 2]
-
+set rate [lindex $argv 2]
+# Set trace filename
+set tracefile [lindex $argv 2]
 
 #start time?
 #
 
+#Open the trace file (before you start the experiment!)
+set tf [open $tracefile.tr w]
 
 #Open the trace file (before you start the experiment!)
-set tf [open my_experimenta2_output.tr w]
+set tf [open $tracefile.tr w]
 $ns trace-all $tf
 
 # Define a 'finish' procedure
