@@ -4,10 +4,12 @@ set ns [new Simulator]
 # Set TCP variant
 set var [lindex $argv 0]
 # Set  CBR flow rate
- set rate [lindex $argv 1]
+set rate [lindex $argv 1]
+# Set trace filename
+set tracefile [lindex $argv 2]
 
 #Open the trace file (before you start the experiment!)
-set tf [open my_experimental_output.tr w]
+set tf [open $tracefile.tr w]
 $ns trace-all $tf
 
 # Define a 'finish' procedure
