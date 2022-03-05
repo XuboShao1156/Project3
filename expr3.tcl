@@ -5,8 +5,12 @@ set ns [new Simulator]
 set var [lindex $argv 0]
 # DRoptail or RED 
 set queueStr [lindex $argv 1]
+# Set start time of CBR
+set start [lindex $argv 2]
+# Set rate of cbr
+set rate [lindex $argv 3]
 # Set trace filename
-set tracefile [lindex $argv 2]
+set tracefile [lindex $argv 4]
 
 #Open the trace file (before you start the experiment!)
 set tf [open $tracefile.tr w]
@@ -28,16 +32,19 @@ set n4 [$ns node]
 set n5 [$ns node]
 set n6 [$ns node]
 
+if {$queueStr ne "DropTail" && $queueStr ne "RED"} {
+	puts "unknown queue style: $queueStr"
+	exit
+}
 
 #create links between the nodes
 #$ns duplex-link node1 node2 bandwidth delay queue-type
 #bandwith 10Mbps delaty 10ms
-$ns duplex-link $n1 $n2 10Mb 10ms ${queueStr}
-$ns duplex-link $n5 $n2 10Mb 10ms ${queueStr}
-$ns duplex-link $n2 $n3 10Mb 10ms ${queueStr}
-$ns duplex-link $n4 $n3 10Mb 10ms ${queueStr}
-$ns duplex-link $n6 $n3 10Mb 10ms ${queueStr}
-
+$ns duplex-link $n1 $n2 10Mb 10ms $queueStr
+$ns duplex-link $n5 $n2 10Mb 10ms $queueStr
+$ns duplex-link $n2 $n3 10Mb 10ms $queueStr
+$ns duplex-link $n4 $n3 10Mb 10ms $queueStr
+$ns duplex-link $n6 $n3 10Mb 10ms $queueStr
 
 #Setup a TCP conncection
 if {$var eq "Reno"} {
@@ -70,26 +77,17 @@ $udp set fid_ 2
 set cbr [new Application/Traffic/CBR]
 $cbr attach-agent $udp
 $cbr set type_ CBR
-#$cbr set packet_size_ 1000
-$cbr set rate_ 1mb
-
+$cbr set rate_ ${rate}mb
 
 
 #Schedule events for the CBR and FTP agents
-$ns at 0.1 "$ftp start"
-$ns at 3.1 "$cbr start"
-$ns at 9.9 "$ftp stop"
-$ns at 10.0 "$cbr stop"
-
+$ns at 0 "$ftp start"
+$ns at $start "$cbr start"
+$ns at 10 "$ftp stop"
+$ns at 10 "$cbr stop"
 
 #Call the finish procedure after  seconds of simulation time
 $ns at 10.0 "finish"
 
-
-
 #Run the simulation
 $ns run
-
-
-# Close the trace file (after you finish the experiment!)
-close $tf

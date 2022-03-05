@@ -1,4 +1,4 @@
-#Create a Simulator object
+# Create a Simulator object
 set ns [new Simulator]
 
 # Set TCP variant
@@ -8,7 +8,7 @@ set rate [lindex $argv 1]
 # Set trace filename
 set tracefile [lindex $argv 2]
 
-#Open the trace file (before you start the experiment!)
+# Open the trace file
 set tf [open $tracefile.tr w]
 $ns trace-all $tf
 
@@ -20,7 +20,7 @@ proc finish {} {
  	exit 0
 }
 
-#Create 6 Nodes
+# Create 6 Nodes
 set n1 [$ns node]
 set n2 [$ns node]
 set n3 [$ns node]
@@ -28,17 +28,23 @@ set n4 [$ns node]
 set n5 [$ns node]
 set n6 [$ns node]
 
-
-#create links between the nodes
-#$ns duplex-link node1 node2 bandwidth delay queue-type
-#bandwith 10Mbps delaty 10ms
+#  N1                     N4
+#   \                    /
+#    \                  /
+#     N2--------------N3
+#    /                  \
+#   /                    \
+#  N5                     N6
+# create links between the nodes
+# $ns duplex-link node1 node2 bandwidth delay queue-type
+# bandwith 10Mbps delaty 10ms
 $ns duplex-link $n1 $n2 10Mb 10ms DropTail
 $ns duplex-link $n5 $n2 10Mb 10ms DropTail
 $ns duplex-link $n2 $n3 10Mb 10ms DropTail
 $ns duplex-link $n4 $n3 10Mb 10ms DropTail
 $ns duplex-link $n6 $n3 10Mb 10ms DropTail
 
-#Setup a TCP conncection
+# Setup a TCP conncection
 if {$var eq "Tahoe"} {
 	set tcp [new Agent/TCP]
 } elseif {$var eq "Reno"} {
@@ -47,8 +53,12 @@ if {$var eq "Tahoe"} {
 	set tcp [new Agent/TCP/Newreno]
 } elseif {$var eq "Vegas"} {
 	set tcp [new Agent/TCP/Vegas]
+} else {
+	puts "unknown TCP variant:$var."
+	exit -1
 }
 
+# Set up a TCP connection
 $tcp set class_ 2 
 $ns attach-agent $n1 $tcp
 set sink [new Agent/TCPSink]
@@ -60,7 +70,6 @@ $tcp set fid_ 1
 set ftp [new Application/FTP]
 $ftp attach-agent $tcp
 $ftp set type_ FTP
-
 
 #set up a UDP connection 
 set udp [new Agent/UDP]
@@ -74,26 +83,19 @@ $udp set fid_ 2
 set cbr [new Application/Traffic/CBR]
 $cbr attach-agent $udp
 $cbr set type_ CBR
-#$cbr set packet_size_ 1000
 $cbr set rate_ ${rate}mb
 
-
-
 #Schedule events for the CBR and FTP agents
-$ns at 0.1 "$cbr start"
-$ns at 0.1 "$ftp start"
-$ns at 10.0 "$ftp stop"
-$ns at 10.0 "$cbr stop"
-
+$ns at 0 "$cbr start"
+$ns at 1 "$ftp start"
+$ns at 11.0 "$ftp stop"
+$ns at 11.0 "$cbr stop"
 
 #Call the finish procedure after  seconds of simulation time
-$ns at 10.0 "finish"
-
-
+$ns at 11.0 "finish"
 
 #Run the simulation
 $ns run
-
 
 # Close the trace file (after you finish the experiment!)
 close $tf
