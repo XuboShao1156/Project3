@@ -24,21 +24,28 @@ proc finish {} {
 }
 
 #Create 6 Nodes
+set n0 [$ns node]
 set n1 [$ns node]
 set n2 [$ns node]
 set n3 [$ns node]
 set n4 [$ns node]
 set n5 [$ns node]
-set n6 [$ns node]
 
+#  n0                     n2
+#   \                    /
+#    \                  /
+#     n1--------------n1
+#    /                  \
+#   /                    \
+#  n3                     n4
 #create links between the nodes
 #$ns duplex-link node1 node2 bandwidth delay queue-type
 #bandwith 10Mbps delaty 10ms
+$ns duplex-link $n0 $n1 10Mb 10ms DropTail
+$ns duplex-link $n4 $n1 10Mb 10ms DropTail
 $ns duplex-link $n1 $n2 10Mb 10ms DropTail
+$ns duplex-link $n3 $n2 10Mb 10ms DropTail
 $ns duplex-link $n5 $n2 10Mb 10ms DropTail
-$ns duplex-link $n2 $n3 10Mb 10ms DropTail
-$ns duplex-link $n4 $n3 10Mb 10ms DropTail
-$ns duplex-link $n6 $n3 10Mb 10ms DropTail
 
 #Setup a variant 1 TCP conncection
 if {$var1 eq "Reno"} {
@@ -50,9 +57,9 @@ if {$var1 eq "Reno"} {
 }
 
 $tcp1 set class_ 1 
-$ns attach-agent $n1 $tcp1
+$ns attach-agent $n0 $tcp1
 set sink1 [new Agent/TCPSink]
-$ns attach-agent $n4 $sink1
+$ns attach-agent $n3 $sink1
 $ns connect $tcp1 $sink1
 $tcp1 set fid_ 1
 
@@ -64,9 +71,9 @@ if {$var2 eq "Reno"} {
 }
 
 $tcp2 set class_ 2
-$ns attach-agent $n5 $tcp2
+$ns attach-agent $n4 $tcp2
 set sink2 [new Agent/TCPSink]
-$ns attach-agent $n6 $sink2
+$ns attach-agent $n5 $sink2
 ns connect $tcp2 $sink2
 $tcp2 set fid_ 2
 
@@ -82,9 +89,9 @@ $ftp2 set type_ FTP
 
 #set up a UDP connection 
 set udp [new Agent/UDP]
-$ns attach-agent $n2 $udp
+$ns attach-agent $n1 $udp
 set null [new Agent/Null]
-$ns attach-agent $n3 $null
+$ns attach-agent $n2 $null
 $ns connect $udp $null
 $udp set fid_ 2
 

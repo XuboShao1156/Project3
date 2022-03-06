@@ -25,26 +25,33 @@ proc finish {} {
 }
 
 #Create 6 Nodes
+set n0 [$ns node]
 set n1 [$ns node]
 set n2 [$ns node]
 set n3 [$ns node]
 set n4 [$ns node]
 set n5 [$ns node]
-set n6 [$ns node]
 
 if {$queueStr ne "DropTail" && $queueStr ne "RED"} {
 	puts "unknown queue style: $queueStr"
 	exit
 }
 
+#  n0                     n3
+#   \                    /
+#    \                  /
+#     n1--------------n2
+#    /                  \
+#   /                    \
+#  n4                     n5
 #create links between the nodes
 #$ns duplex-link node1 node2 bandwidth delay queue-type
 #bandwith 10Mbps delaty 10ms
+$ns duplex-link $n0 $n1 10Mb 10ms $queueStr
+$ns duplex-link $n4 $n1 10Mb 10ms $queueStr
 $ns duplex-link $n1 $n2 10Mb 10ms $queueStr
+$ns duplex-link $n3 $n2 10Mb 10ms $queueStr
 $ns duplex-link $n5 $n2 10Mb 10ms $queueStr
-$ns duplex-link $n2 $n3 10Mb 10ms $queueStr
-$ns duplex-link $n4 $n3 10Mb 10ms $queueStr
-$ns duplex-link $n6 $n3 10Mb 10ms $queueStr
 
 #Setup a TCP conncection
 if {$var eq "Reno"} {
@@ -53,9 +60,9 @@ if {$var eq "Reno"} {
 	set tcp [new Agent/TCP/Sack1]
 }
 $tcp set class_ 1 
-$ns attach-agent $n1 $tcp
+$ns attach-agent $n0 $tcp
 set sink [new Agent/TCPSink]
-$ns attach-agent $n4 $sink
+$ns attach-agent $n3 $sink
 $ns connect $tcp $sink
 $tcp set fid_ 1
 
@@ -67,9 +74,9 @@ $ftp set type_ FTP
 
 #set up a UDP connection 
 set udp [new Agent/UDP]
-$ns attach-agent $n5 $udp
+$ns attach-agent $n4 $udp
 set null [new Agent/Null]
-$ns attach-agent $n6 $null
+$ns attach-agent $n5 $null
 $ns connect $udp $null
 $udp set fid_ 2
 
