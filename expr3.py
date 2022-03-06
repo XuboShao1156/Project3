@@ -19,9 +19,8 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=10) as e:
     for v in variants:
         for q in queue:
             for t in cbr_start:
-                for i in range(1, 6):
-                    fn = "{}-{}-{}-{}".format(v, q, str(t), str(i))
-                    e.submit(run_ns, v, q, str(t), str(cbr_rate), folder + "/" + fn)
+                fn = "{}-{}-{}".format(v, q, str(t))
+                e.submit(run_ns, v, q, str(t), str(cbr_rate), folder + "/" + fn)
 
 
 
