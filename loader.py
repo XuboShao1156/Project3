@@ -1,5 +1,3 @@
-from inspect import trace
-from ntpath import join
 import pandas as pd
 
 trace_format = ['event','time','from node','to node','pkt type','pkt size','flags','fid','src addr','dst addr','seq num','pkt id']
