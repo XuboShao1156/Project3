@@ -3,7 +3,7 @@ import subprocess
 import concurrent.futures
 
 variants = ["Tahoe", "Reno", "NewReno", "Vegas"]
-rate = [i for i in range(1,21)]
+rate = [i for i in range(1,15)]
 
 folder = "expr1"
 if not os.path.exists(folder):

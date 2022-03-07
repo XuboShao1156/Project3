@@ -1,4 +1,3 @@
-from inspect import trace
 import pandas as pd
 
 trace_format = ['event','time','from node','to node','pkt type','pkt size','flags','fid','src addr','dst addr','seq num','pkt id']
@@ -15,7 +14,7 @@ def filter_by_from_and_to_node(trace_data, from_node, to_node):
 def filter_by_tcp(trace_data):
     return trace_data[(trace_data['pkt type'] == 'tcp') | (trace_data['pkt type'] == 'ack')]
 
-def throughput(trace_data, from_node, to_node):
+def average_throughput(trace_data, from_node, to_node):
     trace_data = trace_data[trace_data['event'] == 'r']
     trace_data = filter_by_tcp(filter_by_from_and_to_node(trace_data, from_node, to_node))
     
@@ -23,20 +22,25 @@ def throughput(trace_data, from_node, to_node):
     if count == 0:
         return 0
     elif count == 1:
-        return trace_data['pkt size'].sum() / 1024**2
+        return trace_data['pkt size'].sum() * 8 / 1024**2
     else:
-        return trace_data['pkt size'].sum() / 1024**2 / (trace_data['time'].max() - trace_data['time'].min())
+        return trace_data['pkt size'].sum() * 8 / 1024**2 / (trace_data['time'].max() - trace_data['time'].min())
 
-def drop_rate(trace_data, from_node, to_node):
+def average_drop_rate(trace_data, from_node, to_node):
     trace_data = filter_by_tcp(filter_by_from_and_to_node(trace_data, from_node, to_node))
     drop_data = trace_data[trace_data['event'] == 'd']
     return 0 if drop_data.size == 0 else drop_data.size * 1.0 / trace_data.size 
     
-def latency(trace_data, from_node, to_node):
-    pass
+def average_latency(trace_data, from_node, to_node):
+    trace_data = filter_by_tcp(filter_by_from_and_to_node(trace_data, from_node, to_node))
+    sent_data = trace_data[trace_data['event'] == '+'][['event','time','pkt id']]
+    received_data = trace_data[(trace_data['event'] == 'r')][['event','time','pkt id']]
+    joined = sent_data.set_index('pkt id').join(received_data.set_index('pkt id'), how='inner',
+        lsuffix='_sent', rsuffix='_received')
+    
+    return joined['time_received'].sub(joined['time_sent']).mean()
 
-data = load_trace("./expr1/NewReno-20.tr")
-print(data)
-print(throughput(data, 1, 2))
-print(drop_rate(data, 1, 2))
-print(drop_rate(data, 1, 2))
+data = load_trace("./expr1/NewReno-1.tr")
+print(average_throughput(data, 1, 2))
+print(average_drop_rate(data, 1, 2))
+print(average_latency(data, 1, 2))
