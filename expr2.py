@@ -3,7 +3,7 @@ import subprocess
 import concurrent.futures
 
 variants_pair = [("Reno", "Reno"), ("NewReno", "Reno"), ("Vegas", "Vegas"), ("NewReno", "Vegas")]
-rate = [i for i in range(1,21)]
+rate = [i for i in range(1,15)]
 start_time = [(0,0),(0,2),(2,0),(0,5),(5,0)]
 
 folder = "expr2"

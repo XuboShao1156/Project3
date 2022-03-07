@@ -22,9 +22,9 @@ def average_throughput(trace_data, from_node, to_node):
     if count == 0:
         return 0
     elif count == 1:
-        return trace_data['pkt size'].sum() / 1024**2
+        return trace_data['pkt size'].sum() * 8 / 1024**2
     else:
-        return trace_data['pkt size'].sum() / 1024**2 / (trace_data['time'].max() - trace_data['time'].min())
+        return trace_data['pkt size'].sum() * 8 / 1024**2 / (trace_data['time'].max() - trace_data['time'].min())
 
 def average_drop_rate(trace_data, from_node, to_node):
     trace_data = filter_by_tcp(filter_by_from_and_to_node(trace_data, from_node, to_node))
@@ -40,7 +40,7 @@ def average_latency(trace_data, from_node, to_node):
     
     return joined['time_received'].sub(joined['time_sent']).mean()
 
-data = load_trace("./expr1/NewReno-5.tr")
+data = load_trace("./expr1/NewReno-1.tr")
 print(average_throughput(data, 1, 2))
 print(average_drop_rate(data, 1, 2))
 print(average_latency(data, 1, 2))
