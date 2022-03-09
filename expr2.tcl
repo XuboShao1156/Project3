@@ -93,7 +93,7 @@ $ns attach-agent $n1 $udp
 set null [new Agent/Null]
 $ns attach-agent $n2 $null
 $ns connect $udp $null
-$udp set fid_ 2
+$udp set fid_ 3
 
 #Setup a CBR over UDP connection
 set cbr [new Application/Traffic/CBR]

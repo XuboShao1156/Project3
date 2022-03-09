@@ -5,7 +5,7 @@ import concurrent.futures
 variants = ["Reno", "SACK"]
 queue = ["DropTail", "RED"]
 cbr_start = [1,3,5]
-cbr_rate = 10
+cbr_rate = 8
 
 folder = "expr3"
 if not os.path.exists(folder):
