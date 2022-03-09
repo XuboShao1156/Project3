@@ -17,7 +17,7 @@ for path in Path(source_folder).glob("*"):
     time1 = int(tokens[1])
     variant2 = tokens[2]
     time2 = int(tokens[3])
-    cbr_rate = int(tokens[4])
+    cbr_rate = float(tokens[4])
 
     trace_data = analyzer.filter_by_tcp(analyzer.load_trace(path))
     variant_data1 = trace_data[trace_data['fid'] == 1]

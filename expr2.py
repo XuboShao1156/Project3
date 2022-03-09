@@ -1,10 +1,17 @@
 import os
+import decimal
 import subprocess
 import concurrent.futures
 
 variants_pair = [("Reno", "Reno"), ("NewReno", "Reno"), ("Vegas", "Vegas"), ("NewReno", "Vegas")]
-rate = [i for i in range(1,15)]
 start_time = [(0,0),(0,2),(2,0),(0,5),(5,0)]
+
+def float_range(start, stop, step):
+  while start < stop:
+    yield float(start)
+    start += decimal.Decimal(step)
+
+rate = ["{:.1f}".format(i) for i in float_range(1, 10.1, 0.1)]
 
 folder = "expr2"
 if not os.path.exists(folder):
@@ -19,4 +26,4 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=10) as e:
         for r in rate:
             for t in start_time:
                 fn = "{}-{}-{}-{}-{}".format(p[0], t[0], p[1], t[1], r)
-                e.submit(run_ns, p[0], str(t[0]), p[1], str(t[1]), str(r), folder + "/" + fn)
+                e.submit(run_ns, p[0], str(t[0]), p[1], str(t[1]), r, folder + "/" + fn)

@@ -12,7 +12,7 @@ for path in Path(source_folder).glob("*"):
 
     tokens = path.name[:-len(path.suffix)].split('-')
     variant = tokens[0]
-    cbr_rate = int(tokens[1])
+    cbr_rate = float(tokens[1])
 
     trace_data = analyzer.filter_by_tcp(analyzer.load_trace(path))
     stats.loc[len(stats)] = [variant, cbr_rate,
