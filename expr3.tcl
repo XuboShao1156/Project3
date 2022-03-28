@@ -46,12 +46,12 @@ if {$queueStr ne "DropTail" && $queueStr ne "RED"} {
 #  n4                     n5
 #create links between the nodes
 #$ns duplex-link node1 node2 bandwidth delay queue-type
-#bandwith 10Mbps delaty 10ms
-$ns duplex-link $n0 $n1 10Mb 10ms $queueStr
-$ns duplex-link $n4 $n1 10Mb 10ms $queueStr
-$ns duplex-link $n1 $n2 10Mb 10ms $queueStr
-$ns duplex-link $n3 $n2 10Mb 10ms $queueStr
-$ns duplex-link $n5 $n2 10Mb 10ms $queueStr
+#bandwith 10Mbps delaty 2ms
+$ns duplex-link $n0 $n1 10Mb 2ms $queueStr
+$ns duplex-link $n4 $n1 10Mb 2ms $queueStr
+$ns duplex-link $n1 $n2 10Mb 2ms $queueStr
+$ns duplex-link $n3 $n2 10Mb 2ms $queueStr
+$ns duplex-link $n5 $n2 10Mb 2ms $queueStr
 
 #Setup a TCP conncection
 if {$var eq "Reno"} {

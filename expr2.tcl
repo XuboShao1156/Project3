@@ -40,12 +40,12 @@ set n5 [$ns node]
 #  n3                     n4
 #create links between the nodes
 #$ns duplex-link node1 node2 bandwidth delay queue-type
-#bandwith 10Mbps delaty 10ms
-$ns duplex-link $n0 $n1 10Mb 10ms DropTail
-$ns duplex-link $n4 $n1 10Mb 10ms DropTail
-$ns duplex-link $n1 $n2 10Mb 10ms DropTail
-$ns duplex-link $n3 $n2 10Mb 10ms DropTail
-$ns duplex-link $n5 $n2 10Mb 10ms DropTail
+#bandwith 10Mbps delaty 2ms
+$ns duplex-link $n0 $n1 10Mb 2ms DropTail
+$ns duplex-link $n4 $n1 10Mb 2ms DropTail
+$ns duplex-link $n1 $n2 10Mb 2ms DropTail
+$ns duplex-link $n3 $n2 10Mb 2ms DropTail
+$ns duplex-link $n5 $n2 10Mb 2ms DropTail
 
 #Setup a variant 1 TCP conncection
 if {$var1 eq "Reno"} {

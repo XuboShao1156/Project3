@@ -4,14 +4,15 @@ import decimal
 from scipy.stats import ttest_ind
 from analyzer import filter_by_from_and_to_node, filter_by_tcp, load_trace
 
-variants_pair = [("Reno", "Reno"), ("NewReno", "Reno"), ("Vegas", "Vegas"), ("NewReno", "Vegas")]
+# variants_pair = [("Reno", "Reno"), ("NewReno", "Reno"), ("Vegas", "Vegas"), ("NewReno", "Vegas")]
+variants_pair = [("NewReno", "Vegas")]
 
 def float_range(start, stop, step):
   while start < stop:
     yield float(start)
     start += decimal.Decimal(step)
 
-data = pd.read_csv('stats/expr2.csv')
+data = pd.read_csv('Project3/stats/expr2.csv')
 rate = [i for i in float_range(1, 10.1, 0.1)]
 
 throughput_p_values = pd.DataFrame(columns=['Var 1', 'Var 2', 'CBR', \
@@ -53,3 +54,4 @@ for p in variants_pair:
 throughput_p_values.to_csv('expr2-t-test.csv', index=False)
 drop_rate_p_values.to_csv('expr2-t-test.csv', index=False)
 latency_p_values.to_csv('expr2-t-test.csv', index=False)
+pass

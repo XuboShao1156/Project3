@@ -37,12 +37,12 @@ set n5 [$ns node]
 #  n4                     n5
 # create links between the nodes
 # $ns duplex-link node1 node2 bandwidth delay queue-type
-# bandwith 10Mbps delaty 10ms
-$ns duplex-link $n0 $n1 10Mb 10ms DropTail
-$ns duplex-link $n4 $n1 10Mb 10ms DropTail
-$ns duplex-link $n1 $n2 10Mb 10ms DropTail
-$ns duplex-link $n3 $n2 10Mb 10ms DropTail
-$ns duplex-link $n5 $n2 10Mb 10ms DropTail
+# bandwith 10Mbps delaty 2ms
+$ns duplex-link $n0 $n1 10Mb 2ms DropTail
+$ns duplex-link $n4 $n1 10Mb 2ms DropTail
+$ns duplex-link $n1 $n2 10Mb 2ms DropTail
+$ns duplex-link $n3 $n2 10Mb 2ms DropTail
+$ns duplex-link $n5 $n2 10Mb 2ms DropTail
 
 # Setup a TCP conncection
 if {$var eq "Tahoe"} {
@@ -87,12 +87,12 @@ $cbr set rate_ ${rate}mb
 
 #Schedule events for the CBR and FTP agents
 $ns at 0 "$cbr start"
-$ns at 1 "$ftp start"
-$ns at 11.0 "$ftp stop"
-$ns at 11.0 "$cbr stop"
+$ns at 0 "$ftp start"
+$ns at 10.0 "$ftp stop"
+$ns at 10.0 "$cbr stop"
 
 #Call the finish procedure after  seconds of simulation time
-$ns at 11.0 "finish"
+$ns at 10.0 "finish"
 
 #Run the simulation
 $ns run
