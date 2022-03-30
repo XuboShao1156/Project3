@@ -1,9 +1,11 @@
 import pandas as pd
 
+#load trace files.
 trace_format = ['event','time','from node','to node','pkt type','pkt size','flags','fid','src addr','dst addr','seq num','pkt id']
 def load_trace(filepath):
     return pd.read_csv(filepath, sep=' ', names=trace_format)
 
+#fileters used in each expr.
 def filter_by_from_and_to_node(trace_data, from_node, to_node):
     if from_node is not None:
         trace_data = trace_data[trace_data['from node'] == from_node]

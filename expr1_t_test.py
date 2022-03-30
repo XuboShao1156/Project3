@@ -6,6 +6,7 @@ from analyzer import filter_by_from_and_to_node, filter_by_tcp, load_trace
 
 variants = ["Tahoe", "Reno", "NewReno", "Vegas"]
 
+#using tt_test packages in analyzing.
 def float_range(start, stop, step):
   while start < stop:
     yield float(start)
