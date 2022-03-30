@@ -6,6 +6,7 @@ from pathlib import Path
 headers = ['TCP Variant', 'CBR Rate', 'Throughput', 'Drop Rate', 'Latency']
 stats = pd.DataFrame(columns=headers)
 
+# read trace files
 source_folder = 'expr1'
 for path in Path(source_folder).glob("*"):
     print('processing {}...'.format(path))

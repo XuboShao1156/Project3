@@ -8,6 +8,7 @@ headers = ['Variant 1', 'Start Time 1', 'Variant 2', 'Start Time 2', 'CBR Rate',
             'Throughput 2', 'Drop Rate 2', 'Latency 2']
 stats = pd.DataFrame(columns=headers)
 
+# read trace files
 source_folder = 'expr2'
 for path in Path(source_folder).glob("*"):
     print('processing {}...'.format(path))
